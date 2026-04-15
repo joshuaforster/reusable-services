@@ -1,17 +1,17 @@
 from database.queries.select.select_application_by_id import select_application_by_id
 
 
-def build_letter_data(lead_id):
-    lead = select_application_by_id(lead_id)
+def build_letter_data(application_id):
+    application = select_application_by_id(application_id)
 
-    letter_count = lead["letter_count"] or 0
+    letter_count = application["letter_count"] or 0
 
     # --- content logic ---
     def get_body():
         if letter_count == 0:
             return f"""Dear Occupier,
 
-We noticed your application: {lead["proposal"]}.
+We noticed your application: {application["proposal"]}.
 
 We specialise in helping with projects like this.
 
@@ -20,7 +20,7 @@ Kind regards,"""
         elif letter_count == 1:
             return f"""Dear Occupier,
 
-Just following up on your application: {lead["proposal"]}.
+Just following up on your application: {application["proposal"]}.
 
 Happy to chat if useful.
 
@@ -29,7 +29,7 @@ Kind regards,"""
         else:
             return f"""Dear Occupier,
 
-Final follow-up regarding your application: {lead["proposal"]}.
+Final follow-up regarding your application: {application["proposal"]}.
 
 Kind regards,"""
 
@@ -50,8 +50,8 @@ Kind regards,"""
 
         "recipient": [
             "The Occupier",
-            lead["address"],
-            lead["postcode"]
+            application["address"],
+            application["postcode"]
         ],
 
         "subject": "Subject: Project enquiry",

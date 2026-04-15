@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 type Settings = {
   companyName: string;
@@ -7,19 +7,25 @@ type Settings = {
   phone: string;
 };
 
+const DEFAULT_SETTINGS: Settings = {
+  companyName: "",
+  address: "",
+  email: "",
+  phone: "",
+};
+
 export default function Settings() {
-  const [settings, setSettings] = useState<Settings>({
-    companyName: "",
-    address: "",
-    email: "",
-    phone: "",
-  });
+  const [settings, setSettings] = useState<Settings>(DEFAULT_SETTINGS);
+
+  useEffect(() => {
+    const saved = localStorage.getItem("settings");
+    if (saved) {
+      setSettings(JSON.parse(saved));
+    }
+  }, []);
 
   function handleChange(field: keyof Settings, value: string) {
-    setSettings({
-      ...settings,
-      [field]: value,
-    });
+    setSettings({ ...settings, [field]: value });
   }
 
   function saveSettings() {

@@ -4,9 +4,9 @@ from database.queries.select.count_applications import count_applications
 router = APIRouter()
 
 @router.get("/applications")
-def get_applications(query: str = "", page: int = 1, limit: int = 10, status: str = "", search: str ="",):
-    applications = select_all_applications(search,page, limit, status)
-    total = count_applications(query, status)
+def get_applications(search: str = "", page: int = 1, limit: int = 10, status: str = ""):
+    applications = select_all_applications(search, page, limit, status)
+    total = count_applications(search, status)
     return {
         "data": applications,
         "total": total
