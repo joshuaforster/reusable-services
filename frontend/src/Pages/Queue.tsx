@@ -1,38 +1,24 @@
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-
-type Application = {
-  id: string;
-  reference: string;
-  address: string;
-  proposal: string;
-  letter_count: number;
-  total_cost: number;
-};
+import { API_BASE } from "../config";
+import type { Application } from "../types";
 
 export default function Queue() {
   const [applications, setApplications] = useState<Application[]>([]);
 
-  async function getApplications() {
-    const response = await fetch("http://127.0.0.1:8000/queue");
+  async function fetchQueue() {
+    const response = await fetch(`${API_BASE}/queue`);
     const result = await response.json();
-    setApplications(result.data || []);
+    setApplications(result.data ?? []);
   }
 
   useEffect(() => {
-    async function load() {
-      await getApplications();
-    }
-
-    load();
+    fetchQueue();
   }, []);
 
   async function submitLetter(id: string) {
-    await fetch(`http://127.0.0.1:8000/send_letter/${id}`, {
-      method: "POST",
-    });
-
-    await getApplications();
+    await fetch(`${API_BASE}/send_letter/${id}`, { method: "POST" });
+    await fetchQueue();
   }
 
   return (

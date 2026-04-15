@@ -13,7 +13,7 @@ def send_letter(application_id: str):
 
     response = send_to_api(application_id)
 
-    if not response or "id" not in response:
+    if not response:
         return {"error": "Pingen failed"}
 
     pingen_id = response

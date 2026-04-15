@@ -1,14 +1,7 @@
 import { useParams, useNavigate, Link } from "react-router-dom";
 import { useEffect, useState } from "react";
-
-type Application = {
-  id: string;
-  reference: string;
-  address: string;
-  proposal: string;
-  letter_count: number;
-  total_cost: number;
-};
+import { API_BASE } from "../config";
+import type { Application } from "../types";
 
 export default function ApplicationDetail() {
   const [application, setApplication] = useState<Application | null>(null);
@@ -17,32 +10,25 @@ export default function ApplicationDetail() {
   const { id } = useParams();
 
   useEffect(() => {
-    async function getApplication() {
-      const response = await fetch(`http://127.0.0.1:8000/application/${id}`);
+    async function load() {
+      const response = await fetch(`${API_BASE}/application/${id}`);
       const data = await response.json();
       setApplication(data);
     }
 
-    getApplication();
+    load();
   }, [id]);
 
   async function submitLetter(applicationId: string) {
-    const response = await fetch(
-      `http://127.0.0.1:8000/send_letter/${applicationId}`,
-      {
-        method: "POST",
-      },
-    );
+    const response = await fetch(`${API_BASE}/send_letter/${applicationId}`, {
+      method: "POST",
+    });
 
     if (!response.ok) {
       throw new Error("Failed to send letter");
     }
 
-    // refetch this application
-    const updated = await fetch(
-      `http://127.0.0.1:8000/application/${applicationId}`,
-    );
-
+    const updated = await fetch(`${API_BASE}/application/${applicationId}`);
     const updatedData = await updated.json();
     setApplication(updatedData);
   }

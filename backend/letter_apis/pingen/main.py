@@ -5,13 +5,13 @@ from letter_apis.pingen.api_calls.send_created_letter import send_created_letter
 from letter_template.render_letter import generate_letter_bytes
 from os import getenv
 
-def send_to_api(lead_id: str):
-    
+def send_to_api(application_id: str):
+
     base_url = getenv("PINGEN_BASE_URL")
     org_id = getenv("PINGEN_ORG_ID")
     url_letters = f"{base_url}/organisations/{org_id}/letters"
 
-    pdf_bytes = generate_letter_bytes(lead_id)
+    pdf_bytes = generate_letter_bytes(application_id)
     access_token = get_pingen_access_token()
 
     file_url, file_url_signature = get_pingen_file_upload_details(access_token)

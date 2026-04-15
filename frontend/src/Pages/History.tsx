@@ -1,25 +1,18 @@
 import { useState, useEffect } from "react";
-
-type Application = {
-  id: string;
-  reference: string;
-  address: string;
-  proposal: string;
-  letter_count: number;
-  total_cost: number;
-};
+import { API_BASE } from "../config";
+import type { Application } from "../types";
 
 export default function History() {
   const [applications, setApplications] = useState<Application[]>([]);
 
   useEffect(() => {
-    async function getLeads() {
-      const response = await fetch("http://127.0.0.1:8000/applications?status=history");
+    async function load() {
+      const response = await fetch(`${API_BASE}/applications?status=history`);
       const result = await response.json();
-      setApplications(result.data);
+      setApplications(result.data ?? []);
     }
 
-    getLeads();
+    load();
   }, []);
 
   return (
@@ -39,10 +32,10 @@ export default function History() {
             key={application.id}
             className="grid grid-cols-4 p-3 border-b border-gray-800 text-sm items-center"
           >
-            <span>{application.id}</span>
+            <span>{application.reference}</span>
             <span>{application.address}</span>
             <span>{application.letter_count}</span>
-            <span>£{application.id}</span>
+            <span>£{application.total_cost}</span>
           </div>
         ))}
       </div>

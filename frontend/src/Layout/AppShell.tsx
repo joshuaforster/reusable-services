@@ -1,13 +1,14 @@
 import { useState } from "react";
 import { Outlet, NavLink } from "react-router-dom";
-import {navigation} from './navigation'
+import { navigation } from "./navigation";
 import TodaysDate from "./todaysDate";
+import Footer from "./footer";
 
-export default function Dashboard() {
+export default function AppShell() {
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
   return (
-    <div className="bg-gray-900 text-white min-h-screen">
+    <div className="bg-gray-900 text-white min-h-screen flex flex-col">
       {/* Mobile sidebar */}
       {sidebarOpen && (
         <div className="fixed inset-0 z-40 lg:hidden">
@@ -35,7 +36,7 @@ export default function Dashboard() {
       </div>
 
       {/* Main */}
-      <div className="lg:pl-72 flex flex-col min-h-screen">
+      <div className="lg:pl-72 flex flex-col flex-1">
         {/* Top bar */}
         <header className="sticky top-0 z-30 flex h-16 items-center gap-4 px-4 border-b border-white/10 bg-gray-900">
           <button
@@ -66,15 +67,18 @@ export default function Dashboard() {
 
         {/* Page content */}
         <main className="flex-1 py-8 px-4 sm:px-6 lg:px-8 bg-gray-950">
-          <h1>Today is: <TodaysDate /></h1>
+          <p className="text-sm text-gray-500 mb-4">
+            Today is: <TodaysDate />
+          </p>
           <Outlet />
         </main>
+
+        <Footer />
       </div>
     </div>
   );
 }
 
-/* Sidebar */
 function SidebarContent() {
   return (
     <div className="flex flex-col flex-1">
